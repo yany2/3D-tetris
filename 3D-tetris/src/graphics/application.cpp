@@ -98,7 +98,7 @@ Application::Application
 		}
 		unsigned char attrib[] = { 3 };
 		buffer2 = new Buffer(vertex2, 44 * 3, attrib, 1, index2, 44);
-		shader2 = new Shader("src/graphics/vertex2.txt", "src/graphics/fragment2.txt");
+		shader2 = new Shader("shaders/vertex2.txt", "shaders/fragment2.txt");
 	}
 
 

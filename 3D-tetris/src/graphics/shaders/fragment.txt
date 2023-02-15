@@ -1,0 +1,14 @@
+#version 460 core
+
+out vec4 FragColor;
+
+in vec3 fcol;
+in vec2 ftexc;
+
+uniform sampler2D tex;
+uniform vec4 color;
+
+void main()
+{
+	FragColor = mix(texture(tex, ftexc), color, 0.6);
+}

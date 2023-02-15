@@ -27,3 +27,19 @@ target_link_libraries(3D-tetris PRIVATE
 	glfw
 	glad_gl_core_46
 )
+
+add_dependencies(3D-tetris glfw glad_gl_core_46)
+
+add_custom_target(shaders DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/src/graphics/shaders)
+add_custom_command(
+	TARGET shaders
+	COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_CURRENT_SOURCE_DIR}/src/graphics/shaders ${CMAKE_CURRENT_BINARY_DIR}/shaders
+)
+
+add_custom_target(resources DEPENDS $CMAKE_CURRENT_SOURCE_DIR/resources)
+add_custom_command(
+	TARGET shaders
+	COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_CURRENT_SOURCE_DIR}/resources ${CMAKE_CURRENT_BINARY_DIR}/resources
+)
+
+add_dependencies(3D-tetris shaders resources)
