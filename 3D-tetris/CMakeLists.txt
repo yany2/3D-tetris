@@ -2,7 +2,7 @@
 
 set_property(TARGET 3D-tetris PROPERTY CXX_STANDARD 20)
 
-add_dependencies(3D-tetris glfw)
+add_dependencies(3D-tetris glfw glad_gl_core_46)
 
 target_include_directories(3D-tetris PRIVATE
 	${CMAKE_SOURCE_DIR}/extern/glfw/include/GLFW
@@ -16,4 +16,5 @@ target_link_directories(3D-tetris PRIVATE
 
 target_link_libraries(3D-tetris PRIVATE
 	glfw
+	glad_gl_core_46
 )
