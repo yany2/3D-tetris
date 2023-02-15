@@ -2,26 +2,101 @@
 
 #define STB_IMAGE_IMPLEMENTATION
 #include <stb_image.h>
-#include <glad/gl.h>
-#include <glfw3.h>
+
 
 using namespace std;
 
+#include <glfw3.h>
+
+#include <glm.hpp>
+#include <gtc/matrix_transform.hpp>
+#include <gtc/type_ptr.hpp>
+
+#include <iostream>
+#include <chrono>
+
+import graphics;
+import game;
+
 int main()
 {
-	glfwInit();
-	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
-	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
-	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-	GLFWwindow* window = glfwCreateWindow(640, 480, "hello glfw & glad2", nullptr, nullptr);
-	glfwMakeContextCurrent(window);
-	gladLoadGL(glfwGetProcAddress);
-	glViewport(0, 0, 640, 480);
-	glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
-	for (int i = 0; i < 600; i++) {
-		glClear(GL_COLOR_BUFFER_BIT);
-		glfwSwapBuffers(window);
+	std::srand(std::time(NULL));
+	float vertex[] =
+	{
+		-1.0f,	-1.0f,	-1.0f,		0.0f,	0.0f,	0.0f,	0.0f, 0.0f,
+		-1.0f,	-1.0f,	-1.0f,		0.0f,	0.0f,	0.0f,	1.0f, 1.0f,
+		1.0f,	-1.0f,	-1.0f,		0.0f,	0.0f,	0.0f,	0.0f, 1.0f,
+		1.0f,	-1.0f,	-1.0f,		0.0f,	0.0f,	0.0f,	1.0f, 0.0f,
+		-1.0f,	1.0f,	-1.0f,		0.0f,	0.0f,	0.0f,	0.0f, 1.0f,
+		-1.0f,	1.0f,	-1.0f,		0.0f,	0.0f,	0.0f,	1.0f, 0.0f,
+		1.0f,	1.0f,	-1.0f,		0.0f,	0.0f,	0.0f,	0.0f, 0.0f,
+		1.0f,	1.0f,	-1.0f,		0.0f,	0.0f,	0.0f,	1.0f, 1.0f,
+
+		-1.0f,	-1.0f,	1.0f,		0.0f,	0.0f,	0.0f,	0.0f, 1.0f,
+		1.0f,	-1.0f,	1.0f,		0.0f,	0.0f,	0.0f,	1.0f, 1.0f,
+		-1.0f,	1.0f,	1.0f,		0.0f,	0.0f,	0.0f,	0.0f, 0.0f,
+		1.0f,	1.0f,	1.0f,		0.0f,	0.0f,	0.0f,	1.0f, 0.0f
+	};
+
+	unsigned char a[] = { 3, 3, 2 };
+
+	unsigned int index[] =
+	{
+		0, 7, 3,
+		0, 7, 4,
+		9, 10, 8,
+		9, 10, 11,
+		7, 10, 11,
+		7, 10, 5,
+		3, 8, 9,
+		3, 8, 0,
+		2, 11, 6,
+		2, 11, 9,
+		1, 10, 8,
+		1, 10, 4
+	};
+
+	Game* game = new Game();
+
+
+	graphics::Application app
+	(
+		"OpenGL",
+		"src/graphics/vertex.txt",
+		"src/graphics/fragment.txt",
+		vertex, 12 * 8,
+		a, 3,
+		index, 3 * 2 * 6,
+		"src/texture.jpg",
+		game
+	);
+
+
+
+	long time = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
+	long seconds = time / 3000;
+
+	while (!app.shouldClose())
+	{
+		if (app.drawFrame())
+		{
+			if (game->update() == 1) break;
+		}
+
+		glfwPollEvents();
+
+		long newtime = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
+		long newseconds = newtime / 3000;
+		if (newseconds != seconds)
+		{
+			if (game->update() == 1) break;
+			seconds = newseconds;
+		}
 	}
-	glfwTerminate();
+	std::cout << game->score << std::endl;
+	delete game;
+
 	return 0;
 }
+
+

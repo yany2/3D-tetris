@@ -1,4 +1,13 @@
-﻿add_executable (3D-tetris "src/3D-tetris.cpp" )
+﻿add_executable (3D-tetris
+	"src/3D-tetris.cpp"
+	"src/game/game.ixx" "src/game/game.cpp"
+	"src/graphics/graphics.ixx"
+		"src/graphics/application.cpp"
+		"src/graphics/buffer.cpp"
+		"src/graphics/shader.cpp"
+		"src/graphics/camera.cpp"
+		"src/graphics/texture.cpp"
+)
 
 set_property(TARGET 3D-tetris PROPERTY CXX_STANDARD 20)
 
