@@ -56,14 +56,12 @@ int main()
 
 	graphics::Application app
 	(
-		"OpenGL",
+		game, "OpenGL", "resources/textures/texture.jpg",
 		"shaders/vertex.txt",
 		"shaders/fragment.txt",
 		vertex, 12 * 8,
 		a, 3,
-		index, 3 * 2 * 6,
-		"resources/textures/texture.jpg",
-		game
+		index, 3 * 2 * 6
 	);
 
 
