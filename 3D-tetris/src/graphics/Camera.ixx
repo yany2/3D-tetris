@@ -3,12 +3,55 @@
 
 #include <stdio.h>
 
-module graphics;
+export module graphics:Camera;
 
 using glm::vec3;
 using glm::mat4;
 using glm::radians;
 using glm::normalize;
+
+namespace graphics {
+	class Camera{
+	private:
+		float fov;
+		float aspectRatio;
+
+		glm::mat4 projection;
+		glm::mat4 view;
+
+		float yaw;
+		float pitch;
+
+		glm::vec3 position;
+		glm::vec3 front;
+		glm::vec3 up;
+
+		glm::mat4 projectionView;
+
+		void updateProjection(float nearPlane = 0.001f, float farPlane = 1000.0f);
+		void updateView();
+		void updateProjectionView();
+		void updateFront();
+	public:
+		Camera(
+			float fov,
+			float aspectRatio,
+			glm::vec3 position = glm::vec3(-80.0f, 0.0f, 0.0f),
+			float yaw = 0.0f,
+			float pitch = 0.0f,
+			glm::vec3 up = glm::vec3(0.0f, 1.0f, 0.0f)
+		);
+
+		glm::mat4 getProjectionView() const;
+		void setFov(float fov);
+		void setAspectRatio(float aspectRatio);
+		void setYaw(float yaw);
+		void setPitch(float pitch);
+		void setPosition(glm::vec3 position);
+		void move(float c, float y, float z);
+		void turn(float yaw, float pitch);
+	};
+}
 
 using graphics::Camera;
 

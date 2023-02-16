@@ -1,13 +1,13 @@
 ﻿add_executable (3D-tetris
 	"src/3D-tetris.cpp"
-	"src/game/game.ixx" "src/game/game.cpp"
-	"src/graphics/graphics.ixx"
-		"src/graphics/application.cpp"
-		"src/graphics/buffer.cpp"
-		"src/graphics/shader.cpp"
-		"src/graphics/camera.cpp"
-		"src/graphics/texture.cpp"
-)
+	"src/game/game.ixx"
+		"src/graphics/Buffer.ixx"
+		"src/graphics/Shader.ixx"
+		"src/graphics/Camera.ixx"
+		"src/graphics/Texture.ixx"
+		"src/graphics/Application.ixx"
+		"src/graphics/graphics.ixx"
+  )
 
 set_property(TARGET 3D-tetris PROPERTY CXX_STANDARD 20)
 
@@ -17,6 +17,7 @@ target_include_directories(3D-tetris PRIVATE
 	${CMAKE_SOURCE_DIR}/extern/glfw/include/GLFW
 	${CMAKE_SOURCE_DIR}/extern/glm/glm
 	${CMAKE_SOURCE_DIR}/extern/stb
+	"${CMAKE_CURRENT_BINARY_DIR}/gladsources/glad_gl_core_46/include"
 )
 
 target_link_directories(3D-tetris PRIVATE
@@ -38,7 +39,7 @@ add_custom_command(
 
 add_custom_target(resources DEPENDS $CMAKE_CURRENT_SOURCE_DIR/resources)
 add_custom_command(
-	TARGET shaders
+	TARGET resources
 	COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_CURRENT_SOURCE_DIR}/resources ${CMAKE_CURRENT_BINARY_DIR}/resources
 )
 

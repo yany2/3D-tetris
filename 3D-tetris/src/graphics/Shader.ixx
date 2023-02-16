@@ -7,23 +7,34 @@
 #include <glm.hpp>
 #include <gtc/type_ptr.hpp>
 
-module graphics;
+export module graphics:Shader;
 
-graphics::Shader::Shader
-(
+namespace graphics {
+	class Shader {
+	private:
+		unsigned int program;
+	public:
+		Shader(const char* vertexShaderSourceLocation, const char* fragmentShaderSourceLocation);
+		~Shader();
+		void use() const;
+		void setUniform(const char* name, int value) const;
+		void setUniform(const char* name, glm::vec4 value) const;
+		void setTransform(glm::mat4* transform) const;
+	};
+}
+
+
+graphics::Shader::Shader(
 	const char* vertexShaderSourceLocation,
 	const char* fragmentShaderSourceLocation
-)
-{
-	auto checkCompileErrrors = [](unsigned int shader, bool program)
-	{
+){
+	auto checkCompileErrrors = [](unsigned int shader, bool program){
 		GLenum status = program ? GL_LINK_STATUS : GL_COMPILE_STATUS;
 		auto logFunc = program ? glGetProgramInfoLog : glGetShaderInfoLog;
 		auto succFunc = program ? glGetProgramiv : glGetShaderiv;
 		int success;
 		succFunc(shader, status, &success);
-		if (!success)
-		{
+		if (!success){
 			char* log = new char[1024];
 			logFunc(shader, 1024, nullptr, log);
 			std::cout << log;
@@ -31,8 +42,7 @@ graphics::Shader::Shader
 		}
 	};
 
-	auto compileShader = [](unsigned int shader, const char* sourceLocation)
-	{
+	auto compileShader = [](unsigned int shader, const char* sourceLocation){
 		using std::istreambuf_iterator;
 		std::ifstream sourceFileStream(sourceLocation);
 		std::string source = std::string(istreambuf_iterator<char>(sourceFileStream), istreambuf_iterator<char>());
@@ -60,27 +70,22 @@ graphics::Shader::Shader
 	glDeleteShader(fragment);
 }
 
-graphics::Shader::~Shader()
-{
+graphics::Shader::~Shader(){
 	glDeleteProgram(program);
 }
 
-void graphics::Shader::use() const
-{
+void graphics::Shader::use() const{
 	glUseProgram(program);
 }
 
-void graphics::Shader::setUniform(const char* name, int value) const
-{
+void graphics::Shader::setUniform(const char* name, int value) const{
 	glUniform1i(glGetUniformLocation(program, name), value);
 }
 
-void graphics::Shader::setUniform(const char* name, glm::vec4 value) const
-{
+void graphics::Shader::setUniform(const char* name, glm::vec4 value) const{
 	glUniform4fv(glGetUniformLocation(program, name), 1, glm::value_ptr(value));
 }
 
-void graphics::Shader::setTransform(glm::mat4* transform) const
-{
+void graphics::Shader::setTransform(glm::mat4* transform) const{
 	glUniformMatrix4fv(glGetUniformLocation(program, "transform"), 1, GL_FALSE, glm::value_ptr(*transform));
 }

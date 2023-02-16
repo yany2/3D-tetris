@@ -2,7 +2,31 @@
 
 #include <iostream>
 
-module graphics;
+export module graphics:Buffer;
+
+namespace graphics {
+	class Buffer
+	{
+	private:
+		unsigned int vao;
+		unsigned int vbo;
+		unsigned int ebo;
+		unsigned int size;
+		unsigned int indexc;
+	public:
+		Buffer
+		(
+			float* vertex,
+			unsigned int vertexc,
+			unsigned char* attrib,
+			unsigned int attrc,
+			unsigned int* index,
+			unsigned int indexc
+		);
+		~Buffer();
+		void draw(unsigned int drawMode = GL_TRIANGLES) const;
+	};
+}
 
 graphics::Buffer::Buffer
 (

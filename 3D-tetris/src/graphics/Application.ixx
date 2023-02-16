@@ -3,13 +3,60 @@
 #include <glm.hpp>
 #include <gtc/matrix_transform.hpp>
 #include <gtc/type_ptr.hpp>
-#include <glad/gl.h>
+#include "glad\gl.h"
 #include <glfw3.h>
 
-module graphics;
+export module graphics:Application;
+
+import :Shader;
+import :Buffer;
+import :Camera;
+import :Texture;
+
+import game;
+
 
 using glm::mat4;
 using glm::vec3;
+
+namespace graphics {
+	export class Application
+	{
+	private:
+		GLFWwindow* window;
+		Shader* shader;
+		Buffer* buffer;
+		Shader* shader2;
+		Buffer* buffer2;
+		Texture* texture;
+		Camera* camera;
+		Game* game;
+		float cameraRotation;
+		float cameraHeight;
+		float cameraDistance;
+		static Camera* statCam;
+		static void resizeCallback(GLFWwindow* window, int width, int height);
+		static void mouseMoveCallback(GLFWwindow* window, double x, double y);
+	public:
+		Application
+		(
+			const char* title,
+			const char* vertexShaderSourceLocation,
+			const char* fragmentShaderSourceLocation,
+			float* vertex,
+			unsigned int vertexc,
+			unsigned char* attrib,
+			unsigned int attrc,
+			unsigned int* index,
+			unsigned int indexc,
+			const char* textureLocation,
+			Game* game
+		);
+		~Application();
+		bool drawFrame();
+		bool shouldClose() const;
+	};
+}
 
 using graphics::Application;
 

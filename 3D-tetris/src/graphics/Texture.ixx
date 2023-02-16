@@ -1,7 +1,21 @@
 #include <glad/gl.h>
 #include "stb_image.h"
 
-module graphics;
+export module graphics:Texture;
+
+import :Shader;
+
+namespace graphics {
+	class Texture
+	{
+	private:
+		unsigned int texture;
+	public:
+		Texture(const char* textureLocation);
+		~Texture();
+		void use(Shader* shader) const;
+	};
+}
 
 graphics::Texture::Texture(const char* textureLocation)
 {

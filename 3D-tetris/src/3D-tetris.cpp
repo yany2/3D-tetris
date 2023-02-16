@@ -1,19 +1,14 @@
 ﻿#include <iostream>
+#include <chrono>
 
 #define STB_IMAGE_IMPLEMENTATION
 #include <stb_image.h>
-
-
-using namespace std;
-
 #include <glfw3.h>
-
 #include <glm.hpp>
 #include <gtc/matrix_transform.hpp>
 #include <gtc/type_ptr.hpp>
 
-#include <iostream>
-#include <chrono>
+using namespace std;
 
 import graphics;
 import game;
