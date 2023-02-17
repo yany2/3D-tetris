@@ -1,4 +1,5 @@
 ﻿find_package(glfw3 REQUIRED)
+find_package(glad REQUIRED)
 
 add_executable (3D-tetris
 	"src/3D-tetris.cpp"
@@ -13,20 +14,17 @@ add_executable (3D-tetris
 
 set_property(TARGET 3D-tetris PROPERTY CXX_STANDARD 20)
 
-add_dependencies(3D-tetris glad_gl_core_46)
 
 target_include_directories(3D-tetris PRIVATE
 	${CMAKE_SOURCE_DIR}/extern/glm/glm
 	${CMAKE_SOURCE_DIR}/extern/stb
-	"${CMAKE_CURRENT_BINARY_DIR}/gladsources/glad_gl_core_46/include"
 )
 
 target_link_libraries(3D-tetris PRIVATE
 	glfw
-	glad_gl_core_46
+	glad::glad
 )
 
-add_dependencies(3D-tetris glfw glad_gl_core_46)
 
 add_custom_target(shaders DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/src/graphics/shaders)
 add_custom_command(

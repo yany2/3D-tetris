@@ -1,4 +1,4 @@
-#include <glad/gl.h>
+#include <glad/glad.h>
 #include "stb_image.h"
 
 export module graphics:Texture;

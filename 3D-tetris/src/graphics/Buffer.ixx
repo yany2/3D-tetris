@@ -1,6 +1,6 @@
 #include <iostream>
 
-#include <glad/gl.h>
+#include <glad/glad.h>
 
 export module graphics:Buffer;
 

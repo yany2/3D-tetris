@@ -2,7 +2,7 @@
 #include <fstream>
 #include <sstream>
 
-#include <glad/gl.h>
+#include <glad/glad.h>
 
 #include <glm.hpp>
 #include <gtc/type_ptr.hpp>

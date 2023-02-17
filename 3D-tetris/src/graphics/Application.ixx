@@ -3,7 +3,7 @@
 #include <glm.hpp>
 #include <gtc/matrix_transform.hpp>
 #include <gtc/type_ptr.hpp>
-#include <glad/gl.h>
+#include <glad/glad.h>
 #include <GLFW/glfw3.h>
 
 export module graphics:Application;
@@ -87,7 +87,7 @@ namespace graphics {
 
 			glfwMakeContextCurrent(window);
 
-			if (!gladLoadGL(glfwGetProcAddress)) {
+			if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
 				cout << "Failed to initialize GLAD\n";
 			}
 
