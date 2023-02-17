@@ -3,7 +3,7 @@
 #include <glm.hpp>
 #include <gtc/matrix_transform.hpp>
 #include <gtc/type_ptr.hpp>
-#include "glad\gl.h"
+#include <glad/gl.h>
 #include <glfw3.h>
 
 export module graphics:Application;
@@ -15,9 +15,13 @@ import :Texture;
 
 import game;
 
+using std::cout;
 
 using glm::mat4;
 using glm::vec3;
+using glm::vec4;
+using glm::radians;
+using glm::translate;
 
 bool close = false;
 
@@ -78,13 +82,13 @@ namespace graphics {
 
 			window = glfwCreateWindow(width, height, title, monitor, nullptr);
 			if (!window) {
-				std::cout << "Failed to create GLFW window\n";
+				cout << "Failed to create GLFW window\n";
 			}
 
 			glfwMakeContextCurrent(window);
 
 			if (!gladLoadGL(glfwGetProcAddress)) {
-				std::cout << "Failed to initialize GLAD\n";
+				cout << "Failed to initialize GLAD\n";
 			}
 
 			glfwSetFramebufferSizeCallback(window, resizeCallback);
@@ -168,10 +172,10 @@ namespace graphics {
 			{
 				cameraRotation -= 2;
 			}
-			camera->setPosition(glm::vec3(
-				cameraDistance * (-cos(glm::radians(cameraRotation))) - 10,
+			camera->setPosition(vec3(
+				cameraDistance * (-cos(radians(cameraRotation))) - 10,
 				cameraHeight,
-				cameraDistance * (-sin(glm::radians(cameraRotation))) - 10
+				cameraDistance * (-sin(radians(cameraRotation))) - 10
 			));
 
 			camera->setYaw(cameraRotation);
@@ -239,20 +243,20 @@ namespace graphics {
 			for (int i2 = 0; i2 < 30; i2++)
 			{
 				int colorCode = i2 + 7;
-				shader->setUniform("color", glm::vec4(colorCode % 2, (colorCode / 2) % 2, (colorCode / 4) % 2, 1.0f));
+				shader->setUniform("color", vec4(colorCode % 2, (colorCode / 2) % 2, (colorCode / 4) % 2, 1.0f));
 				for (int i1 = 0; i1 < 10; i1++)
 					for (int i3 = 0; i3 < 10; i3++)
 						if (game->gameGrid[i1][i2][i3])
 						{
-							glm::mat4 model2 = glm::translate(game->getModelMat(), -glm::vec3((float)i1 * 2, (float)i2 * 2, (float)i3 * 2));
+							mat4 model2 = translate(game->getModelMat(), -vec3((float)i1 * 2, (float)i2 * 2, (float)i3 * 2));
 
-							model2 = glm::scale(model2, glm::vec3(1.0, 1.0, 1.0));
+							model2 = glm::scale(model2, vec3(1.0, 1.0, 1.0));
 							//model2 = glm::rotate(model2, glm::radians(20.0f), glm::normalize(glm::vec3(1.0f, 1.0f, 1.0f)));
 
 
 							//model2 = glm::rotate(model2, glm::radians(1.0f), glm::vec3(dist(mt), dist(mt), dist(mt)));
 
-							glm::mat4 transform = camera->getProjectionView() * model2;
+							mat4 transform = camera->getProjectionView() * model2;
 							shader->setTransform(&transform);
 							buffer->draw();
 						}
@@ -260,9 +264,9 @@ namespace graphics {
 			auto coords = game->falling->getCoords();
 			for (auto coord : coords)
 			{
-				glm::mat4 model2 = glm::translate(game->getModelMat(), coord.getTranslateVec3());
-				model2 = glm::scale(model2, glm::vec3(1.0, 1.0, 1.0));
-				glm::mat4 transform = camera->getProjectionView() * model2;
+				mat4 model2 = translate(game->getModelMat(), coord.getTranslateVec3());
+				model2 = glm::scale(model2, vec3(1.0, 1.0, 1.0));
+				mat4 transform = camera->getProjectionView() * model2;
 				shader->setTransform(&transform);
 				buffer->draw();
 			}
@@ -286,9 +290,9 @@ namespace graphics {
 			i--;
 			for (auto coord : coords)
 			{
-				glm::mat4 model2 = glm::translate(game->getModelMat(), coord.getTranslateVec3() + glm::vec3(0, -2 * i, 0));
-				model2 = glm::scale(model2, glm::vec3(1.0, 1.0, 1.0));
-				glm::mat4 transform = camera->getProjectionView() * model2;
+				mat4 model2 = translate(game->getModelMat(), coord.getTranslateVec3() + vec3(0, -2 * i, 0));
+				model2 = glm::scale(model2, vec3(1.0, 1.0, 1.0));
+				mat4 transform = camera->getProjectionView() * model2;
 				shader->setTransform(&transform);
 				glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 				buffer->draw();
@@ -297,8 +301,8 @@ namespace graphics {
 
 
 			shader2->use();
-			glm::mat4 scale = glm::scale(game->getModelMat(), glm::vec3(2, 2, 2));
-			glm::mat4 transform = glm::translate(scale, glm::vec3(-9.5, -29.5, -9.5));
+			mat4 scale = glm::scale(game->getModelMat(), vec3(2, 2, 2));
+			mat4 transform = translate(scale, vec3(-9.5, -29.5, -9.5));
 			transform = camera->getProjectionView() * transform;
 			shader2->setTransform(&transform);
 			buffer2->draw(GL_LINES);

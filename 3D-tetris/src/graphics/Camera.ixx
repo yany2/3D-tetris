@@ -9,6 +9,8 @@ using glm::vec3;
 using glm::mat4;
 using glm::radians;
 using glm::normalize;
+using glm::perspective;
+using glm::lookAt;
 
 namespace graphics {
 	class Camera {
@@ -16,25 +18,25 @@ namespace graphics {
 		float fov;
 		float aspectRatio;
 
-		glm::mat4 projection;
-		glm::mat4 view;
+		mat4 projection;
+		mat4 view;
 
 		float yaw;
 		float pitch;
 
-		glm::vec3 position;
-		glm::vec3 front;
-		glm::vec3 up;
+		vec3 position;
+		vec3 front;
+		vec3 up;
 
-		glm::mat4 projectionView;
+		mat4 projectionView;
 
 		void updateProjection(float nearPlane = 0.001f, float farPlane = 1000.0f) {
-			projection = glm::perspective(radians(fov), aspectRatio, 0.001f, 1000.0f);
+			projection = perspective(radians(fov), aspectRatio, 0.001f, 1000.0f);
 			updateProjectionView();
 		}
 
 		void updateView() {
-			view = glm::lookAt(position, position + front, up);
+			view = lookAt(position, position + front, up);
 			updateProjectionView();
 		}
 
@@ -50,7 +52,7 @@ namespace graphics {
 				pitch = -89.0f;
 			}
 			front = normalize(vec3(
-				cos(radians(yaw)) * cos(glm::radians(pitch)),
+				cos(radians(yaw)) * cos(radians(pitch)),
 				sin(radians(pitch)),
 				sin(radians(yaw)) * cos(radians(pitch))
 			));
@@ -58,7 +60,7 @@ namespace graphics {
 		}
 
 	public:
-		Camera(float fov, float aspectRatio, glm::vec3 position = glm::vec3(-80.0f, 0.0f, 0.0f), float yaw = 0.0f, float pitch = 0.0f, glm::vec3 up = glm::vec3(0.0f, 1.0f, 0.0f)
+		Camera(float fov, float aspectRatio, vec3 position = vec3(-80.0f, 0.0f, 0.0f), float yaw = 0.0f, float pitch = 0.0f, vec3 up = vec3(0.0f, 1.0f, 0.0f)
 		) : fov(fov), aspectRatio(aspectRatio), yaw(yaw), pitch(pitch), position(position), up(up) {
 			updateFront();
 			updateView();
@@ -66,7 +68,7 @@ namespace graphics {
 			updateProjectionView();
 		}
 
-		glm::mat4 getProjectionView() const {
+		mat4 getProjectionView() const {
 			return projectionView;
 		}
 
@@ -90,7 +92,7 @@ namespace graphics {
 			updateFront();
 		}
 
-		void setPosition(glm::vec3 position) {
+		void setPosition(vec3 position) {
 			this->position = position;
 			updateView();
 		}

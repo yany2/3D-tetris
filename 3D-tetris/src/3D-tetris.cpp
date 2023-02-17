@@ -3,19 +3,29 @@
 
 #define STB_IMAGE_IMPLEMENTATION
 #include <stb_image.h>
+
 #include <glfw3.h>
 #include <glm.hpp>
 #include <gtc/matrix_transform.hpp>
 #include <gtc/type_ptr.hpp>
 
-using namespace std;
+using std::srand;
+using std::time;
+using std::cout;
+using std::endl;
+
+using std::chrono::milliseconds;
+using std::chrono::duration_cast;
+using std::chrono::system_clock;
 
 import graphics;
 import game;
 
+using graphics::Application;
+
 int main()
 {
-	std::srand(std::time(NULL));
+	srand(time(NULL));
 	float vertex[] =
 	{
 		-1.0f,	-1.0f,	-1.0f,		0.0f,	0.0f,	0.0f,	0.0f, 0.0f,
@@ -54,7 +64,7 @@ int main()
 	Game* game = new Game();
 
 
-	graphics::Application app
+	Application app
 	(
 		game, "OpenGL", "resources/textures/texture.jpg",
 		"shaders/vertex.txt",
@@ -66,7 +76,7 @@ int main()
 
 
 
-	long time = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
+	long time = duration_cast<milliseconds>(system_clock::now().time_since_epoch()).count();
 	long seconds = time / 3000;
 
 	while (!app.shouldClose())
@@ -78,7 +88,7 @@ int main()
 
 		glfwPollEvents();
 
-		long newtime = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
+		long newtime = duration_cast<milliseconds>(system_clock::now().time_since_epoch()).count();
 		long newseconds = newtime / 3000;
 		if (newseconds != seconds)
 		{
@@ -86,7 +96,7 @@ int main()
 			seconds = newseconds;
 		}
 	}
-	std::cout << game->score << std::endl;
+	cout << game->score << endl;
 	delete game;
 
 	return 0;

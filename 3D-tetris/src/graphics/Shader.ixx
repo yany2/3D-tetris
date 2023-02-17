@@ -9,6 +9,15 @@
 
 export module graphics:Shader;
 
+using std::cout;
+using std::istreambuf_iterator;
+using std::ifstream;
+using std::string;
+
+using glm::vec4;
+using glm::mat4;
+using glm::value_ptr;
+
 namespace graphics {
 	class Shader {
 	private:
@@ -24,15 +33,14 @@ namespace graphics {
 				if (!success) {
 					char* log = new char[1024];
 					logFunc(shader, 1024, nullptr, log);
-					std::cout << log;
+					cout << log;
 					delete[] log;
 				}
 			};
 
 			auto compileShader = [](unsigned int shader, const char* sourceLocation) {
-				using std::istreambuf_iterator;
-				std::ifstream sourceFileStream(sourceLocation);
-				std::string source = std::string(istreambuf_iterator<char>(sourceFileStream), istreambuf_iterator<char>());
+				ifstream sourceFileStream(sourceLocation);
+				string source = string(istreambuf_iterator<char>(sourceFileStream), istreambuf_iterator<char>());
 				const char* c_source = source.c_str();
 
 				glShaderSource(shader, 1, &c_source, nullptr);
@@ -68,12 +76,12 @@ namespace graphics {
 			glUniform1i(glGetUniformLocation(program, name), value);
 		}
 
-		void setUniform(const char* name, glm::vec4 value) const {
-			glUniform4fv(glGetUniformLocation(program, name), 1, glm::value_ptr(value));
+		void setUniform(const char* name, vec4 value) const {
+			glUniform4fv(glGetUniformLocation(program, name), 1, value_ptr(value));
 		}
 
-		void setTransform(glm::mat4* transform) const {
-			glUniformMatrix4fv(glGetUniformLocation(program, "transform"), 1, GL_FALSE, glm::value_ptr(*transform));
+		void setTransform(mat4* transform) const {
+			glUniformMatrix4fv(glGetUniformLocation(program, "transform"), 1, GL_FALSE, value_ptr(*transform));
 		}
 	};
 }

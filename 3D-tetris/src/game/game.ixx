@@ -3,61 +3,65 @@
 
 #include <glm.hpp>
 
+export module game;
+
 using std::vector;
 using std::cout;
+using std::abs;
 
-export module game;
+using glm::vec3;
+using glm::mat4;
 
 struct Coord3D {
 	int x, y, z;
 	Coord3D(int x, int y, int z) : x(x), y(y), z(z) {}
-	glm::vec3 getTranslateVec3() {
-		return -glm::vec3((float)x * 2, (float)y * 2, (float)z * 2);
+	vec3 getTranslateVec3() {
+		return -vec3((float)x * 2, (float)y * 2, (float)z * 2);
 	}
 };
 
 struct FallingShape {
 	int x, y, z;
 	int r1, r2, r3;
-	std::vector<Coord3D>* shape;
+	vector<Coord3D>* shape;
 
 	FallingShape(
 		int x, int y, int z,
 		int r1, int r2, int r3,
-		std::vector<Coord3D>* shape
+		vector<Coord3D>* shape
 	) : x(x), y(y), z(z),
 		r1(r1), r2(r2), r3(r3),
 		shape(shape) {}
 
-	std::vector<Coord3D> getCoords() {
-		std::vector<Coord3D> ret;
+	vector<Coord3D> getCoords() {
+		vector<Coord3D> ret;
 		for (auto coord : *shape) {
 			int x = coord.x;
 			int y = coord.y;
 			int z = coord.z;
 
-			switch (std::abs(r1)) {
+			switch (abs(r1)) {
 			case 1: coord.x = x; break;
 			case 2: coord.x = y; break;
 			case 3: coord.x = z; break;
 			default:
-				std::cout << "bad rotation: r1=" << r1 << "\n";
+				cout << "bad rotation: r1=" << r1 << "\n";
 			}
 
-			switch (std::abs(r2)) {
+			switch (abs(r2)) {
 			case 1: coord.y = x; break;
 			case 2: coord.y = y; break;
 			case 3: coord.y = z; break;
 			default:
-				std::cout << "bad rotation: r2=" << r1 << "\n";
+				cout << "bad rotation: r2=" << r1 << "\n";
 			}
 
-			switch (std::abs(r3)) {
+			switch (abs(r3)) {
 			case 1: coord.z = x; break;
 			case 2: coord.z = y; break;
 			case 3: coord.z = z; break;
 			default:
-				std::cout << "bad rotation: r3=" << r1 << "\n";
+				cout << "bad rotation: r3=" << r1 << "\n";
 			}
 
 
@@ -123,7 +127,7 @@ private:
 public:
 	int*** gameGrid;
 	FallingShape* falling;
-	std::vector<Coord3D>* shapes;
+	vector<Coord3D>* shapes;
 	int score;
 
 	bool moved;
@@ -155,7 +159,7 @@ public:
 		delete[] shapes;
 	}
 
-	glm::mat4 getModelMat() {
+	mat4 getModelMat() {
 		return glm::mat4(1.0f);
 	}
 
