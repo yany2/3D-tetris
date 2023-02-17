@@ -11,3 +11,6 @@
 	path = extern/glad
 	url = https://github.com/Dav1dde/glad.git
 	branch = glad2
+[submodule "extern/vcpkg"]
+	path = extern/vcpkg
+	url = https://github.com/microsoft/vcpkg.git
