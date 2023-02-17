@@ -4,7 +4,7 @@
 #include <gtc/matrix_transform.hpp>
 #include <gtc/type_ptr.hpp>
 #include <glad/gl.h>
-#include <glfw3.h>
+#include <GLFW/glfw3.h>
 
 export module graphics:Application;
 
