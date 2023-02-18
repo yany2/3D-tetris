@@ -4,8 +4,8 @@
 
 #include <glad/glad.h>
 
-#include <glm.hpp>
-#include <gtc/type_ptr.hpp>
+#include <glm/glm.hpp>
+#include <glm/gtc/type_ptr.hpp>
 
 export module graphics:Shader;
 

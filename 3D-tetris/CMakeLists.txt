@@ -1,5 +1,7 @@
 ﻿find_package(glfw3 REQUIRED)
 find_package(glad REQUIRED)
+find_package(glm REQUIRED)
+find_package(stb REQUIRED)
 
 add_executable (3D-tetris
 	"src/3D-tetris.cpp"

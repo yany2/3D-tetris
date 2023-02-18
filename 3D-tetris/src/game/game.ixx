@@ -1,7 +1,7 @@
 #include <vector>
 #include <iostream>
 
-#include <glm.hpp>
+#include <glm/glm.hpp>
 
 export module game;
 
