@@ -23,6 +23,8 @@ using glm::vec4;
 using glm::radians;
 using glm::translate;
 
+using game::Game;
+
 bool close = false;
 
 namespace graphics {
@@ -57,10 +59,10 @@ namespace graphics {
 
 	public:
 		Application(
-			Game* game, const char* title, const char* textureLocation, const char* vertexShaderSourceLocation, const char* fragmentShaderSourceLocation,
+			const char* title, const char* textureLocation, const char* vertexShaderSourceLocation, const char* fragmentShaderSourceLocation,
 			float* vertex, unsigned int vertexc, unsigned char* attrib, unsigned int attrc, unsigned int* index, unsigned int indexc
 		) {
-			this->game = game;
+			this->game = new Game();
 
 			glfwInit();
 			glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
@@ -140,6 +142,7 @@ namespace graphics {
 		}
 
 		~Application() {
+			delete game;
 			delete buffer;
 			delete shader;
 			delete texture;
@@ -147,29 +150,23 @@ namespace graphics {
 			glfwTerminate();
 		}
 
-		bool drawFrame() {
-			if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS)
-			{
+		void drawFrame() {
+			if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS) {
 				cameraHeight += 0.5;
 			}
-			if (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS)
-			{
+			if (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS) {
 				cameraHeight -= 0.5;
 			}
-			if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
-			{
+			if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS) {
 				cameraDistance -= 0.5;
 			}
-			if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
-			{
+			if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS) {
 				cameraDistance += 0.5;
 			}
-			if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
-			{
+			if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS) {
 				cameraRotation += 2;
 			}
-			if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
-			{
+			if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS) {
 				cameraRotation -= 2;
 			}
 			camera->setPosition(vec3(
@@ -180,26 +177,26 @@ namespace graphics {
 
 			camera->setYaw(cameraRotation);
 
-			if (glfwGetKey(window, GLFW_KEY_Q) == GLFW_PRESS)
+			if (glfwGetKey(window, GLFW_KEY_Q) == GLFW_PRESS) {
 				glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
-			if (glfwGetKey(window, GLFW_KEY_E) == GLFW_PRESS)
+			}
+
+			if (glfwGetKey(window, GLFW_KEY_E) == GLFW_PRESS) {
 				glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+			}
 
 			bool flag = true;
-			if (glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS)
-			{
+			if (glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS) {
 				game->moveFalling(-1, true);
 				game->moved = true;
 				flag = false;
 			}
-			if (glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS)
-			{
+			if (glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS) {
 				game->moveFalling(1, true);
 				game->moved = true;
 				flag = false;
 			}
-			if (glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_PRESS)
-			{
+			if (glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_PRESS) {
 				if (glfwGetKey(window, GLFW_KEY_1) == GLFW_PRESS)
 					game->rotateFalling(1, false);
 				else if (glfwGetKey(window, GLFW_KEY_2) == GLFW_PRESS)
@@ -211,8 +208,7 @@ namespace graphics {
 				game->moved = true;
 				flag = false;
 			}
-			if (glfwGetKey(window, GLFW_KEY_RIGHT) == GLFW_PRESS)
-			{
+			if (glfwGetKey(window, GLFW_KEY_RIGHT) == GLFW_PRESS) {
 				if (glfwGetKey(window, GLFW_KEY_1) == GLFW_PRESS)
 					game->rotateFalling(1, true);
 				else if (glfwGetKey(window, GLFW_KEY_2) == GLFW_PRESS)
@@ -225,14 +221,14 @@ namespace graphics {
 				flag = false;
 			}
 
-			if (flag)
-			{
+			if (flag) {
 				game->moved = false;
 			}
 
 
-			if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
+			if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS) {
 				close = true;
+			}
 
 
 
@@ -240,12 +236,11 @@ namespace graphics {
 			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 			shader->use();
 			texture->use(shader);
-			for (int i2 = 0; i2 < 30; i2++)
-			{
+			for (int i2 = 0; i2 < 30; i2++) {
 				int colorCode = i2 + 7;
 				shader->setUniform("color", vec4(colorCode % 2, (colorCode / 2) % 2, (colorCode / 4) % 2, 1.0f));
-				for (int i1 = 0; i1 < 10; i1++)
-					for (int i3 = 0; i3 < 10; i3++)
+				for (int i1 = 0; i1 < 10; i1++) {
+					for (int i3 = 0; i3 < 10; i3++) {
 						if (game->gameGrid[i1][i2][i3])
 						{
 							mat4 model2 = translate(game->getModelMat(), -vec3((float)i1 * 2, (float)i2 * 2, (float)i3 * 2));
@@ -260,36 +255,36 @@ namespace graphics {
 							shader->setTransform(&transform);
 							buffer->draw();
 						}
+					}
+				}
 			}
+
 			auto coords = game->falling->getCoords();
-			for (auto coord : coords)
-			{
+			for (auto coord : coords) {
 				mat4 model2 = translate(game->getModelMat(), coord.getTranslateVec3());
 				model2 = glm::scale(model2, vec3(1.0, 1.0, 1.0));
 				mat4 transform = camera->getProjectionView() * model2;
 				shader->setTransform(&transform);
 				buffer->draw();
 			}
+
 			int i = 0;
 			bool flag2 = true;
-			while (flag2)
-			{
+			while (flag2) {
 				i++;
-				for (auto coord : coords)
-				{
+				for (auto coord : coords) {
 					int x = coord.x;
 					int y = coord.y + i;
 					int z = coord.z;
 
-					if (y > 29 || game->gameGrid[x][y][z])
-					{
+					if (y > 29 || game->gameGrid[x][y][z]) {
 						flag2 = false;
 					}
 				}
 			}
+
 			i--;
-			for (auto coord : coords)
-			{
+			for (auto coord : coords) {
 				mat4 model2 = translate(game->getModelMat(), coord.getTranslateVec3() + vec3(0, -2 * i, 0));
 				model2 = glm::scale(model2, vec3(1.0, 1.0, 1.0));
 				mat4 transform = camera->getProjectionView() * model2;
@@ -323,27 +318,25 @@ namespace graphics {
 
 
 			glfwSwapBuffers(window);
-			if (glfwGetKey(window, GLFW_KEY_ENTER) == GLFW_PRESS)
-			{
-				if (!game->pushed)
-				{
+			if (glfwGetKey(window, GLFW_KEY_ENTER) == GLFW_PRESS) {
+				if (!game->pushed) {
 					while (!game->update());
 					game->pushed = true;
 				}
 			}
-			else
-			{
+			else {
 				game->pushed = false;
 			}
-			return false;
 		}
 
 		bool shouldClose() const {
 			return glfwWindowShouldClose(window) || close;
 		}
+
+		int updateGame() {
+			return game->update();
+		}
 	};
+
+	Camera* Application::statCam;
 }
-
-using graphics::Application;
-
-graphics::Camera* Application::statCam;

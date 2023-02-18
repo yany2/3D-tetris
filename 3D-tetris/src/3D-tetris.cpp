@@ -19,15 +19,12 @@ using std::chrono::duration_cast;
 using std::chrono::system_clock;
 
 import graphics;
-import game;
 
 using graphics::Application;
 
-int main()
-{
+int main() {
 	srand(time(NULL));
-	float vertex[] =
-	{
+	float vertex[] = {
 		-1.0f,	-1.0f,	-1.0f,		0.0f,	0.0f,	0.0f,	0.0f, 0.0f,
 		-1.0f,	-1.0f,	-1.0f,		0.0f,	0.0f,	0.0f,	1.0f, 1.0f,
 		1.0f,	-1.0f,	-1.0f,		0.0f,	0.0f,	0.0f,	0.0f, 1.0f,
@@ -45,8 +42,7 @@ int main()
 
 	unsigned char a[] = { 3, 3, 2 };
 
-	unsigned int index[] =
-	{
+	unsigned int index[] = {
 		0, 7, 3,
 		0, 7, 4,
 		9, 10, 8,
@@ -61,45 +57,29 @@ int main()
 		1, 10, 4
 	};
 
-	Game* game = new Game();
-
-
-	Application app
-	(
-		game, "OpenGL", "resources/textures/texture.jpg",
-		"shaders/vertex.txt",
-		"shaders/fragment.txt",
+	Application app(
+		"OpenGL", "resources/textures/texture.jpg",
+		"shaders/vertex.txt", "shaders/fragment.txt",
 		vertex, 12 * 8,
 		a, 3,
 		index, 3 * 2 * 6
 	);
 
 
-
 	long time = duration_cast<milliseconds>(system_clock::now().time_since_epoch()).count();
 	long seconds = time / 3000;
 
-	while (!app.shouldClose())
-	{
-		if (app.drawFrame())
-		{
-			if (game->update() == 1) break;
-		}
-
+	while (!app.shouldClose()) {
+		app.drawFrame();
 		glfwPollEvents();
 
 		long newtime = duration_cast<milliseconds>(system_clock::now().time_since_epoch()).count();
 		long newseconds = newtime / 3000;
-		if (newseconds != seconds)
-		{
-			if (game->update() == 1) break;
+		if (newseconds != seconds) {
+			if (app.updateGame() == 1) break;
 			seconds = newseconds;
 		}
 	}
-	cout << game->score << endl;
-	delete game;
 
 	return 0;
 }
-
-
