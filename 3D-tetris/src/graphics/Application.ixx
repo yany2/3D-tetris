@@ -132,6 +132,17 @@ namespace graphics {
 				game->moved = false;
 			}
 
+			glfwSwapBuffers(window);
+			if (glfwGetKey(window, GLFW_KEY_ENTER) == GLFW_PRESS) {
+				if (!game->pushed) {
+					while (!game->update());
+					game->pushed = true;
+				}
+			}
+			else {
+				game->pushed = false;
+			}
+
 
 			if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS) {
 				close = true;
@@ -209,17 +220,6 @@ namespace graphics {
 			transform = camera->getProjectionView() * transform;
 			shader2->setTransform(&transform);
 			buffer2->draw(GL_LINES);
-
-			glfwSwapBuffers(window);
-			if (glfwGetKey(window, GLFW_KEY_ENTER) == GLFW_PRESS) {
-				if (!game->pushed) {
-					while (!game->update());
-					game->pushed = true;
-				}
-			}
-			else {
-				game->pushed = false;
-			}
 		}
 
 	public:
